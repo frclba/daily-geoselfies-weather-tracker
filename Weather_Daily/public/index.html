@@ -6,11 +6,26 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
     <title>Daily Weather Tracker</title>
     <script src="sketch.js"></script>
-</head>
+  </head>
   <body>
-    <h1>Daily Weather Tracker</h1>
-    <a href="/logs">list</a>
-    <p>Latitude: <span id="latitude">&deg;</span></p>
-    <p>Longitude: <span id="longitude">&deg;</span></p>
-</body>
+    <!-- HEADER -->
+    <h1>Daily Weather</h1>
+    
+    <!-- MENU -->
+    <div>
+      <a href="/">Checkin</a> | <a href="/checkins">view checkins</a>
+    </div>
+    
+    <!-- INFO Location-->
+    <p>
+      lat: <span id="latitude"></span>&deg;, lon: <span id="longitude"></span>&deg;.
+    </p>
+
+    <p>
+      The weather here is <span id="summary"></span> with a temperature of 
+      <span id="temperatureCelcius"></span>&deg; Celcius | (<span id="temperatureFahrenheit"></span>&deg; Fahrenheit.)
+    </p>
+
+    <button id="checkin">check in</button>
+  </body>
 </html>
