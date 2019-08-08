@@ -20,14 +20,20 @@ async function getData() {
     for (item of data) {
         const marker = L.marker([item.lat, item.lon]).addTo(mymap);
         
-        const markerText = `
+        let markerText = `
             <p>
             lat: ${item.lat}&deg;, lon: ${item.lon}&deg;.
+            </p>
+            <p>
             The weather here is ${item.weather.summary} with a temperature of 
             ${convert_fahrenheit_celcius(item.weather.temperature)}&deg; Celcius | (${item.weather.temperature}&deg; Fahrenheit.)
-            The concentration of particulate matter (${item.air.parameter})
-            is ${item.air.value} ${item.air.unit}  last read on ${item.air.lastUpdated}.
             </p>`
+        
+        if (item.air.value < 0) {
+            markerText += `<p> No air quality reading. </p>`
+        } else {
+            markerText += `<p> The concentration of particulate matter (${item.air.parameter}) is ${item.air.value} ${item.air.unit}  last read on ${item.air.lastUpdated}.</p>`
+        }
 
         marker.bindPopup(markerText);
     }
