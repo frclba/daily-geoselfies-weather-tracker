@@ -1,16 +1,38 @@
 let mymap;
 createMap();
 getData();
+getIssData();
 
 async function createMap() {
     mymap = L.map('checkinsMap').setView([0, 0], 1);
 	const attribution = '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 	const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 	const tiles = L.tileLayer(tileUrl, { attribution });
-
 	tiles.addTo(mymap);
 }
 
+async function getIssData() {
+    // FETCH ISS DATA FROM SERVER
+    const response_iss = await fetch('/iss');
+    const dataISS = await response_iss.json();
+
+    // ISS marker custom icon
+    const issIcon = L.icon({
+        iconUrl: 'iss200.png',
+        iconSize: [50, 32],
+        iconAnchor: [25, 16]
+    });
+
+    const { latitude, longitude } = dataISS;
+    const markerISS = L.marker([latitude, longitude], { icon: issIcon }).addTo(mymap);
+    markerISS.setLatLng([latitude, longitude], 2);
+    
+    const issText = `<p>INTERNATIONAL SPACE STATION</p>
+        <p>latitude:${latitude}</p>
+        <p>longitude:${longitude}</p>`
+    
+    markerISS.bindPopup(issText);
+}
 
 async function getData() {
     const response = await fetch('/api');

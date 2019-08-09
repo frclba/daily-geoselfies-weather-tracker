@@ -23,6 +23,12 @@ app.get('/api', (request, response) => {
         response.json(data);
     });
 });
+app.get('/iss', async (request, response) => {
+    const iss_api_url = `https://api.wheretheiss.at/v1/satellites/${process.env.ISS_API_KEY}`;    
+	const iss_fetch_response = await fetch(iss_api_url);
+    const iss_data = await iss_fetch_response.json();
+    response.json(iss_data)
+});
 
 app.post('/api', (request, response) => {
     const data = request.body;
@@ -39,10 +45,10 @@ app.get('/weather/:latlon', async (request, response) => {
         lon: latlon[1]
     };
 
-    const weather_api_url = `https://api.darksky.net/forecast/${process.env.API_KEY}/${coordinates.lat},${coordinates.lon}`;
+    const weather_api_url = `https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${coordinates.lat},${coordinates.lon}`;
     const weather_fetch_response = await fetch(weather_api_url);
     const weather_data = await weather_fetch_response.json();
-
+    
     const air_quality_url = `https://api.openaq.org/v1/latest?coordinates${coordinates.lat},${coordinates.lon}`;
     const air_quality_response = await fetch(air_quality_url);
     const air_quality_data = await air_quality_response.json();
@@ -51,6 +57,5 @@ app.get('/weather/:latlon', async (request, response) => {
         weather: weather_data,
         air_quality: air_quality_data
     };
-
     response.json(data);
 });

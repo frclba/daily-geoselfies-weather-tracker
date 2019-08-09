@@ -1,33 +1,32 @@
 function setup() {
     noCanvas();
-    const button = document.getElementById('checkin');
-
     if('geolocation' in navigator) {
         console.log('geolocation available')
         
         navigator.geolocation.getCurrentPosition(async position => {
         let lat, lon, weather, air;
             try{
+                // USER POSTION
                 lat = position.coords.latitude;
                 lon = position.coords.longitude;
-
+                               
+                // FETCH WEATHER DATA FROM SERVER
                 const api_url = `/weather/${lat},${lon}`;
                 const response = await fetch(api_url);
                 const data = await response.json();
-                
                 weather = data.weather.currently;
                 air = data.air_quality.results[0].measurements[0] || null;
 
                 const temperatureCelcius = (data.weather.currently.temperature - 32) * 5/9;
 
-                // Weather DATA
+                // SET Weather DATA ON PAGE
                 document.getElementById('latitude').textContent = lat.toFixed(2) ;
                 document.getElementById('longitude').textContent = lon.toFixed(2);
                 document.getElementById('summary').textContent = weather.summary;
                 document.getElementById('temperatureFahrenheit').textContent = weather.temperature;
                 document.getElementById('temperatureCelcius').textContent = temperatureCelcius.toFixed(1);  
                 
-                // AIR DATA
+                // SET AIR DATA ON PAGE
                 document.getElementById('aq_parameter').textContent = air.parameter;
                 document.getElementById('aq_value').textContent = air.value;
                 document.getElementById('aq_units').textContent = air.unit;
