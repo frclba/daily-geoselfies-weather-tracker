@@ -1,9 +1,12 @@
 const express = require('express');
 const Datastore = require('nedb');
 const fetch = require('node-fetch');
-const app = express();
+require('dotenv').config();
 
-app.listen(3000, () => console.log('listening at 3000'));
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => console.log(`listening at ${port}`));
 
 app.use(express.static('public'));
 app.use(express.json({ limit: '1mb' }));
@@ -36,7 +39,7 @@ app.get('/weather/:latlon', async (request, response) => {
         lon: latlon[1]
     };
 
-    const weather_api_url = `https://api.darksky.net/forecast/9a3eb9d9cbec6695bc6b366eaa3e9df3/${coordinates.lat},${coordinates.lon}`;
+    const weather_api_url = `https://api.darksky.net/forecast/${process.env.API_KEY}/${coordinates.lat},${coordinates.lon}`;
     const weather_fetch_response = await fetch(weather_api_url);
     const weather_data = await weather_fetch_response.json();
 
