@@ -56,10 +56,29 @@ async function getData() {
         } else {
             markerText += `<p> The concentration of particulate matter (${item.air.parameter}) is ${item.air.value} ${item.air.unit}  last read on ${item.air.lastUpdated}.</p>`
         }
+        createCheckinEntry(item);
 
         marker.bindPopup(markerText);
     }
     console.log(data);
+}
+
+function createCheckinEntry(item) {
+    const root = document.createElement('p');
+    const geo = document.createElement('div');
+    const date = document.createElement('div');
+    const image = document.createElement('img');
+    const mood = document.createElement('div');
+
+    const dateString = `date: ${new Date(item.timestamp).toLocaleString()}`;
+    mood.textContent = `mood: ${item.mood}`
+
+    date.textContent = dateString;
+    image.src = item.image64;
+    image.alt = 'People making silly faces with random moods';
+
+    root.append(date, image, mood);
+    document.body.append(root);
 }
 
 function convert_fahrenheit_celcius(temperature) {
