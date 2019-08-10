@@ -1,7 +1,11 @@
 function setup() {
+    const video = createCapture(VIDEO);
+    const button = document.getElementById('submit');
     noCanvas();
+    video.size(160, 120);
+
     if('geolocation' in navigator) {
-        console.log('geolocation available')
+        console.log('Geolocation Available')
         
         navigator.geolocation.getCurrentPosition(async position => {
         let lat, lon, weather, air;
@@ -30,7 +34,7 @@ function setup() {
                 document.getElementById('aq_parameter').textContent = air.parameter;
                 document.getElementById('aq_value').textContent = air.value;
                 document.getElementById('aq_units').textContent = air.unit;
-                document.getElementById('aq_date').textContent = air.lastUpdated;
+                document.getElementById('aq_date').textContent = new Date(air.lastUpdated).toLocaleString();
             }
             catch(error) {
                 console.error(error);
@@ -38,17 +42,22 @@ function setup() {
                 document.getElementById('aq_value').textContent = "No Air Quality Reading";
             }
             
-            const db_data = {lat, lon, weather, air}
-
-            const options = {
-                method: 'POST',
-                headers: {
-                    'Content-Type' : 'application/json'
-                },
-                body: JSON.stringify(db_data)
-            };
-            const db_response = await fetch('/api', options);
-            const db_json = await db_response.json();
+            button.addEventListener('click', async event => {
+                const mood = document.getElementById('mood').value;
+                video.loadPixels();
+                const image64 = video.canvas.toDataURL();
+                const db_data = {lat, lon, weather, air, mood, image64}
+                
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    body: JSON.stringify(db_data)
+                };
+                const db_response = await fetch('/api', options);
+                const db_json = await db_response.json();
+            });
         });
     }
     else {

@@ -23,12 +23,6 @@ app.get('/api', (request, response) => {
         response.json(data);
     });
 });
-app.get('/iss', async (request, response) => {
-    const iss_api_url = `https://api.wheretheiss.at/v1/satellites/${process.env.ISS_API_KEY}`;    
-	const iss_fetch_response = await fetch(iss_api_url);
-    const iss_data = await iss_fetch_response.json();
-    response.json(iss_data)
-});
 
 app.post('/api', (request, response) => {
     const data = request.body;
@@ -36,6 +30,13 @@ app.post('/api', (request, response) => {
     data.timestamp = timestamp;
     database.insert(data);
     response.json(data);
+});
+
+app.get('/iss', async (request, response) => {
+    const iss_api_url = `https://api.wheretheiss.at/v1/satellites/${process.env.ISS_API_KEY}`;    
+	const iss_fetch_response = await fetch(iss_api_url);
+    const iss_data = await iss_fetch_response.json();
+    response.json(iss_data)
 });
 
 app.get('/weather/:latlon', async (request, response) => {
